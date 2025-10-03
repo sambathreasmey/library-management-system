@@ -24,10 +24,15 @@ class Config:
     JWT_REFRESH_COOKIE_PATH = "/"
 
     MYSQL_USER = os.getenv("MYSQL_USER")
+    print("MYSQL_USER", MYSQL_USER)
     MYSQL_PASSWORD = os.getenv("MYSQL_PASSWORD")
+    print("MYSQL_PASSWORD", MYSQL_PASSWORD)
     MYSQL_HOST = os.getenv("MYSQL_HOST", "127.0.0.1")
-    MYSQL_PORT = os.getenv("MYSQL_PORT", "3307")  # << default 3307
+    print("MYSQL_HOST", MYSQL_HOST)
+    MYSQL_PORT = os.getenv("MYSQL_PORT", "3306")  # << default 3307
+    print("MYSQL_PORT", MYSQL_PORT)
     MYSQL_DB = os.getenv("MYSQL_DB")
+    print("MYSQL_DB", MYSQL_DB)
 
     SQLALCHEMY_DATABASE_URI = (
         f"mysql+mysqlconnector://{MYSQL_USER}:{MYSQL_PASSWORD}"
