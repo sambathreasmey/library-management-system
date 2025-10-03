@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 from datetime import timedelta
 
 BASE_DIR = Path(__file__).resolve().parent
+print(BASE_DIR)
 load_dotenv(BASE_DIR / ".env")
 
 class Config:
