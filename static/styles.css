@@ -1,0 +1,63 @@
+:root{
+  --topbar-h: 56px;      /* default Bootstrap navbar height */
+  --sidebar-w: 260px;    /* sidebar width */
+}
+
+/* General polish */
+body { background-color: var(--bs-body-bg); }
+.card { border: 0; border-radius: 1rem; box-shadow: 0 .25rem 1rem rgba(0,0,0,.06); }
+.card .card-body { padding: 1.25rem; }
+
+/* Sidebar link styles */
+.sidebar-nav .list-group-item{
+  background: transparent;
+  color: rgba(255,255,255,.92);
+  border: 0;
+  border-radius: 0;
+  padding: .9rem 1.1rem;
+}
+.sidebar-nav .list-group-item:hover { background: rgba(255,255,255,.08); }
+.sidebar-nav .list-group-item.active { background: rgba(255,255,255,.16); font-weight: 600; }
+.list-group-flush {
+    width: 100%;
+}
+
+/* Fixed sidebar on lg+ and spacing for main */
+@media (min-width: 992px){
+  #sidebar{
+    position: fixed;
+    top: var(--topbar-h);
+    left: 0;
+    bottom: 0;
+    height: calc(100vh - var(--topbar-h));
+    width: var(--sidebar-w);
+    border-right: 1px solid rgba(255,255,255,.15);
+    overflow-y: auto;
+  }
+  #main{
+    margin-left: var(--sidebar-w);
+    padding-top: 1.25rem;
+  }
+}
+
+/* DataTables small visual tweak for sort arrows */
+table.dataTable>thead .sorting:after,
+table.dataTable>thead .sorting_asc:after,
+table.dataTable>thead .sorting_desc:after { opacity: .5; }
+
+/* Center login card nicely (if you use login.html) */
+.auth-wrapper {
+  min-height: calc(100dvh - var(--topbar-h));
+  display: grid;
+  place-items: center;
+}
+
+/* KPI cards */
+.kpi {
+  display: flex; align-items: center; gap: .75rem;
+}
+.kpi .kpi-icon {
+  width: 46px; height: 46px; border-radius: .8rem; display: grid; place-items: center;
+  background: rgba(13,110,253,.1);
+}
+.kpi .kpi-value { font-size: 2rem; font-weight: 700; line-height: 1; }

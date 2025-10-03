@@ -1,0 +1,36 @@
+import os
+from pathlib import Path
+from dotenv import load_dotenv
+from datetime import timedelta
+
+BASE_DIR = Path(__file__).resolve().parent
+load_dotenv(BASE_DIR / ".env")
+
+class Config:
+    SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret")
+    JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY", "jwt-secret")
+    JWT_COOKIE_SECURE = False
+    JWT_TOKEN_LOCATION = ["cookies", "headers"]  # <- add "headers"
+    JWT_COOKIE_CSRF_PROTECT = False              # keep forms simple in dev
+    JWT_COOKIE_SAMESITE = "Lax"
+    # Token lifetimes
+    # JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=2)
+    JWT_ACCESS_TOKEN_EXPIRES = timedelta(minutes=15)
+    # JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=14)
+    JWT_REFRESH_TOKEN_EXPIRES = timedelta(hours=1)
+
+    # IMPORTANT: make sure both cookies are sent to all paths
+    JWT_ACCESS_COOKIE_PATH = "/"
+    JWT_REFRESH_COOKIE_PATH = "/"
+
+    MYSQL_USER = os.getenv("MYSQL_USER")
+    MYSQL_PASSWORD = os.getenv("MYSQL_PASSWORD")
+    MYSQL_HOST = os.getenv("MYSQL_HOST", "127.0.0.1")
+    MYSQL_PORT = os.getenv("MYSQL_PORT", "3307")  # << default 3307
+    MYSQL_DB = os.getenv("MYSQL_DB")
+
+    SQLALCHEMY_DATABASE_URI = (
+        f"mysql+mysqlconnector://{MYSQL_USER}:{MYSQL_PASSWORD}"
+        f"@{MYSQL_HOST}:{MYSQL_PORT}/{MYSQL_DB}?charset=utf8mb4"
+    )
+    SQLALCHEMY_TRACK_MODIFICATIONS = False

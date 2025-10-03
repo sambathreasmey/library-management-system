@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block breadcrumb %}<li class="breadcrumb-item active">Dashboard</li>{% endblock %}
+{% block content %}
+  <div class="row g-3">
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-body kpi">
+          <div class="kpi-icon text-primary"><i class="bi bi-book"></i></div>
+          <div>
+            <div class="text-muted small">Total Titles</div>
+            <div class="kpi-value">{{ total_books }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-body kpi">
+          <div class="kpi-icon text-success" style="background:rgba(25,135,84,.12)"><i class="bi bi-collection"></i></div>
+          <div>
+            <div class="text-muted small">Total Copies</div>
+            <div class="kpi-value">{{ total_copies }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-body kpi">
+          <div class="kpi-icon text-info" style="background:rgba(13,202,240,.12)"><i class="bi bi-people"></i></div>
+          <div>
+            <div class="text-muted small">Total Users</div>
+            <div class="kpi-value">{{ total_users }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h5 class="mt-4">Latest Added</h5>
+  <div class="card">
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-hover datatable" data-client="true">
+          <thead>
+            <tr><th>#</th><th>Title</th><th>Author</th><th>ISBN</th><th>Year</th><th>Copies</th></tr>
+          </thead>
+          <tbody>
+          {% for b in latest_books %}
+            <tr>
+              <td>{{ b.id }}</td><td>{{ b.title }}</td><td>{{ b.author }}</td>
+              <td>{{ b.isbn or "-" }}</td><td>{{ b.published_year or "-" }}</td><td>{{ b.copies }}</td>
+            </tr>
+          {% else %}
+            <tr><td colspan="6" class="text-muted">No books yet.</td></tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+{% endblock %}
