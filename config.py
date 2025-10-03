@@ -1,5 +1,7 @@
 import os
 from pathlib import Path
+from urllib.parse import quote_plus
+
 from dotenv import load_dotenv
 from datetime import timedelta
 
@@ -35,8 +37,9 @@ class Config:
     MYSQL_DB = os.getenv("MYSQL_DB")
     print("MYSQL_DB", MYSQL_DB)
 
+    password_encoded = quote_plus(MYSQL_PASSWORD)
     SQLALCHEMY_DATABASE_URI = (
-        f"mysql+mysqlconnector://{MYSQL_USER}:{MYSQL_PASSWORD}"
+        f"mysql+mysqlconnector://{MYSQL_USER}:{password_encoded}"
         f"@{MYSQL_HOST}:{MYSQL_PORT}/{MYSQL_DB}?charset=utf8mb4"
     )
     SQLALCHEMY_TRACK_MODIFICATIONS = False
