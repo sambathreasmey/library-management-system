@@ -72,22 +72,26 @@ def create_app():
 
     # Blueprints
     from auth.routes import auth_bp
-    from books.routes import books_bp
+    from booking.routes import books_bp
     from users.routes import users_bp
     from api.routes import api_bp
     from customers.routes import customers_bp
     from games.routes import games_bp
+    from banks.routes import banks_bp
+    from transactions.routes import transactions_bp
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(books_bp)
     app.register_blueprint(customers_bp)
     app.register_blueprint(games_bp)
+    app.register_blueprint(banks_bp)
+    app.register_blueprint(transactions_bp)
     app.register_blueprint(users_bp)
     app.register_blueprint(api_bp)
 
     @app.route("/")
     def index():
-        return redirect(url_for("books.dashboard"))
+        return redirect(url_for("booking.dashboard"))
 
     # Initialize DB & seed an admin user (only if empty)
     with app.app_context():

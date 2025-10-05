@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify, abort
 from flask_jwt_extended import verify_jwt_in_request, get_jwt
 from sqlalchemy import func, or_, asc, desc
 from extensions import db
-from models import Book, User, Customer, Game
+from models import User, Customer, Game, Bank, Transaction
 
 api_bp = Blueprint("api", __name__, url_prefix="/api")
 
@@ -133,7 +133,114 @@ def games_table():
         "data": data
     })
 
-@api_bp.route("/books", methods=["GET", "POST"])
+@api_bp.route("/banks", methods=["GET", "POST"])
+def banks_table():
+    _jwt_required()
+
+    draw, start, length, search_value, order_col_index, order_dir = _parse_dt_params()
+    columns = ["id", "name", "created_by", "updated_by", "created_at", "updated_at"]
+
+    base_query = db.session.query(Bank)
+    total_records = db.session.scalar(db.select(func.count(Bank.id))) or 0
+
+    if search_value:
+        like = f"%{search_value}%"
+        base_query = base_query.filter(
+            Bank.name.ilike(like)
+        )
+
+    filtered_records = base_query.with_entities(func.count(Bank.id)).scalar() or 0
+
+    # Ordering
+    if order_col_index is not None and order_col_index.isdigit():
+        idx = int(order_col_index)
+        idx = min(max(idx, 0), len(columns) - 1)
+        colname = columns[idx]
+        col = getattr(Bank, colname)
+        if order_dir == "desc":
+            base_query = base_query.order_by(desc(col))
+        else:
+            base_query = base_query.order_by(asc(col))
+    else:
+        base_query = base_query.order_by(desc(Bank.created_at))
+
+    # Paging
+    rows = base_query.offset(start).limit(length).all()
+
+    data = []
+    for bank in rows:
+        data.append({
+            "id": bank.id,
+            "name": bank.name,
+            "created_by": bank.created_by or "",
+            "updated_by": bank.updated_by or "",
+            "created_at": bank.created_at.strftime("%Y-%m-%d %H:%M") if bank.created_at else "",
+            "updated_at": bank.updated_at.strftime("%Y-%m-%d %H:%M") if bank.updated_at else ""
+        })
+
+    return jsonify({
+        "draw": draw,
+        "recordsTotal": total_records,
+        "recordsFiltered": filtered_records,
+        "data": data
+    })
+
+@api_bp.route("/transactions", methods=["GET", "POST"])
+def transactions_table():
+    _jwt_required()
+
+    draw, start, length, search_value, order_col_index, order_dir = _parse_dt_params()
+    columns = ["id", "amount", "created_by", "updated_by", "created_at", "updated_at"]
+
+    base_query = db.session.query(Transaction)
+    total_records = db.session.scalar(db.select(func.count(Transaction.id))) or 0
+
+    if search_value:
+        like = f"%{search_value}%"
+        base_query = base_query.filter(
+            Transaction.name.ilike(like)
+        )
+
+    filtered_records = base_query.with_entities(func.count(Transaction.id)).scalar() or 0
+
+    # Ordering
+    if order_col_index is not None and order_col_index.isdigit():
+        idx = int(order_col_index)
+        idx = min(max(idx, 0), len(columns) - 1)
+        colname = columns[idx]
+        col = getattr(Transaction, colname)
+        if order_dir == "desc":
+            base_query = base_query.order_by(desc(col))
+        else:
+            base_query = base_query.order_by(asc(col))
+    else:
+        base_query = base_query.order_by(desc(Transaction.created_at))
+
+    # Paging
+    rows = base_query.offset(start).limit(length).all()
+
+    data = []
+    for transaction in rows:
+        data.append({
+            "id": transaction.id,
+            "amount": transaction.amount,
+            "bank_stor": transaction.bank_stor,
+            "currency": transaction.currency,
+            "type": transaction.type,
+            "created_by": transaction.created_by or "",
+            "updated_by": transaction.updated_by or "",
+            "created_at": transaction.created_at.strftime("%Y-%m-%d %H:%M") if transaction.created_at else "",
+            "updated_at": transaction.updated_at.strftime("%Y-%m-%d %H:%M") if transaction.updated_at else ""
+        })
+
+    return jsonify({
+        "draw": draw,
+        "recordsTotal": total_records,
+        "recordsFiltered": filtered_records,
+        "data": data
+    })
+
+@api_bp.route("/booking", methods=["GET", "POST"])
 def books_table():
     _jwt_required()
 

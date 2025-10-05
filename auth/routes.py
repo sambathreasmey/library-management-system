@@ -35,7 +35,7 @@ def login_submit():
     access_token = create_access_token(identity=identity, additional_claims=base_claims)
     refresh_token = create_refresh_token(identity=identity, additional_claims=base_claims)
 
-    resp = make_response(redirect(url_for("books.dashboard")))
+    resp = make_response(redirect(url_for("booking.dashboard")))
     set_access_cookies(resp, access_token)
     set_refresh_cookies(resp, refresh_token)
 
@@ -89,7 +89,7 @@ def refresh_access_token():
 def refresh_silent():
     identity = get_jwt_identity()
     claims = get_jwt()
-    next_url = request.args.get("next") or url_for("books.dashboard")
+    next_url = request.args.get("next") or url_for("booking.dashboard")
     new_access = create_access_token(
         identity=identity,
         additional_claims={
