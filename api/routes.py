@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify, abort
 from flask_jwt_extended import verify_jwt_in_request, get_jwt
 from sqlalchemy import func, or_, asc, desc
 from extensions import db
-from models import Book, User
+from models import Book, User, Customer, Game
 
 api_bp = Blueprint("api", __name__, url_prefix="/api")
 
@@ -27,6 +27,111 @@ def _admin_required():
     claims = get_jwt() or {}
     if not claims.get("is_admin", False):
         abort(403, description="Admins only")
+
+@api_bp.route("/customers", methods=["GET", "POST"])
+def customers_table():
+    _jwt_required()
+
+    draw, start, length, search_value, order_col_index, order_dir = _parse_dt_params()
+    columns = ["id", "name", "acc_id", "created_by", "updated_by", "created_at", "updated_at"]
+
+    base_query = db.session.query(Customer)
+    total_records = db.session.scalar(db.select(func.count(Customer.id))) or 0
+
+    if search_value:
+        like = f"%{search_value}%"
+        base_query = base_query.filter(
+            or_(Customer.name.ilike(like), Customer.acc_id.ilike(like))
+        )
+
+    filtered_records = base_query.with_entities(func.count(Customer.id)).scalar() or 0
+
+    # Ordering
+    if order_col_index is not None and order_col_index.isdigit():
+        idx = int(order_col_index)
+        idx = min(max(idx, 0), len(columns) - 1)
+        colname = columns[idx]
+        col = getattr(Customer, colname)
+        if order_dir == "desc":
+            base_query = base_query.order_by(desc(col))
+        else:
+            base_query = base_query.order_by(asc(col))
+    else:
+        base_query = base_query.order_by(desc(Customer.created_at))
+
+    # Paging
+    rows = base_query.offset(start).limit(length).all()
+
+    data = []
+    for customer in rows:
+        data.append({
+            "id": customer.id,
+            "name": customer.name,
+            "acc_id": customer.acc_id,
+            "created_by": customer.created_by or "",
+            "updated_by": customer.updated_by or "",
+            "created_at": customer.created_at.strftime("%Y-%m-%d %H:%M") if customer.created_at else "",
+            "updated_at": customer.updated_at.strftime("%Y-%m-%d %H:%M") if customer.updated_at else ""
+        })
+
+    return jsonify({
+        "draw": draw,
+        "recordsTotal": total_records,
+        "recordsFiltered": filtered_records,
+        "data": data
+    })
+
+@api_bp.route("/games", methods=["GET", "POST"])
+def games_table():
+    _jwt_required()
+
+    draw, start, length, search_value, order_col_index, order_dir = _parse_dt_params()
+    columns = ["id", "name", "created_by", "updated_by", "created_at", "updated_at"]
+
+    base_query = db.session.query(Game)
+    total_records = db.session.scalar(db.select(func.count(Game.id))) or 0
+
+    if search_value:
+        like = f"%{search_value}%"
+        base_query = base_query.filter(
+            Game.name.ilike(like)
+        )
+
+    filtered_records = base_query.with_entities(func.count(Game.id)).scalar() or 0
+
+    # Ordering
+    if order_col_index is not None and order_col_index.isdigit():
+        idx = int(order_col_index)
+        idx = min(max(idx, 0), len(columns) - 1)
+        colname = columns[idx]
+        col = getattr(Game, colname)
+        if order_dir == "desc":
+            base_query = base_query.order_by(desc(col))
+        else:
+            base_query = base_query.order_by(asc(col))
+    else:
+        base_query = base_query.order_by(desc(Game.created_at))
+
+    # Paging
+    rows = base_query.offset(start).limit(length).all()
+
+    data = []
+    for game in rows:
+        data.append({
+            "id": game.id,
+            "name": game.name,
+            "created_by": game.created_by or "",
+            "updated_by": game.updated_by or "",
+            "created_at": game.created_at.strftime("%Y-%m-%d %H:%M") if game.created_at else "",
+            "updated_at": game.updated_at.strftime("%Y-%m-%d %H:%M") if game.updated_at else ""
+        })
+
+    return jsonify({
+        "draw": draw,
+        "recordsTotal": total_records,
+        "recordsFiltered": filtered_records,
+        "data": data
+    })
 
 @api_bp.route("/books", methods=["GET", "POST"])
 def books_table():

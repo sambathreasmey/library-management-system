@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify
+from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify, make_response
 from flask_jwt_extended import (
     create_access_token,
     create_refresh_token,
@@ -21,7 +21,7 @@ def login_page():
 @auth_bp.post("/login")
 def login_submit():
     username = request.form.get("username", "").strip()
-    password = request.form.get("password", "")
+    password = request.form.get("password", "").strip()
     user = User.query.filter_by(username=username).first()
 
     if not user or not user.check_password(password):
@@ -32,12 +32,14 @@ def login_submit():
     identity = str(user.id)
     base_claims = {"username": user.username, "is_admin": bool(user.is_admin)}
 
-    access_token  = create_access_token(identity=identity, additional_claims=base_claims)
+    access_token = create_access_token(identity=identity, additional_claims=base_claims)
     refresh_token = create_refresh_token(identity=identity, additional_claims=base_claims)
 
-    resp = redirect(url_for("books.dashboard"))
+    resp = make_response(redirect(url_for("books.dashboard")))
     set_access_cookies(resp, access_token)
     set_refresh_cookies(resp, refresh_token)
+
+    flash(f"Welcome back, {user.username}!", "success")
     return resp
 
 @auth_bp.post("/logout")

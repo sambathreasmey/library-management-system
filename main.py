@@ -75,9 +75,13 @@ def create_app():
     from books.routes import books_bp
     from users.routes import users_bp
     from api.routes import api_bp
+    from customers.routes import customers_bp
+    from games.routes import games_bp
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(books_bp)
+    app.register_blueprint(customers_bp)
+    app.register_blueprint(games_bp)
     app.register_blueprint(users_bp)
     app.register_blueprint(api_bp)
 

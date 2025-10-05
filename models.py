@@ -35,3 +35,24 @@ class Book(db.Model):
     published_year = db.Column(db.Integer, nullable=True)
     copies = db.Column(db.Integer, default=1)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+class Customer(db.Model):
+    __tablename__ = "customers"
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(120), nullable=False)
+    acc_id = db.Column(db.String(120), nullable=False)
+    user_id = db.Column(db.String(32), nullable=False)
+    created_by = db.Column(db.String(120), nullable=False)
+    updated_by = db.Column(db.String(120), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+class Game(db.Model):
+    __tablename__ = "games"
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(120), nullable=False)
+    user_id = db.Column(db.String(32), nullable=False)
+    created_by = db.Column(db.String(120), nullable=False)
+    updated_by = db.Column(db.String(120), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow)

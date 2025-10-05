@@ -45,7 +45,6 @@ def dashboard():
 
 @books_bp.get("/manage/books")
 def list_books():
-    # No need to query DB here, just render the page with empty table
     login_required()
     return render_template("manage_books.html")
 

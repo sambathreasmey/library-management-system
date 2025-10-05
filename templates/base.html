@@ -24,7 +24,6 @@
 <!-- Topbar -->
 <nav class="navbar navbar-dark bg-dark sticky-top shadow-sm" id="topbar">
   <div class="container-fluid">
-    <!-- Mobile menu button -->
     <button class="btn btn-outline-light d-lg-none"
             type="button"
             data-bs-toggle="offcanvas"
@@ -34,13 +33,16 @@
     </button>
 
     <a class="navbar-brand d-flex align-items-center gap-2" href="{{ url_for('books.dashboard') }}">
-      <i class="bi bi-feather"></i> <span><b>YING System</b></span>
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-leaf" viewBox="0 0 16 16">
+  <path d="M1.4 1.7c.216.289.65.84 1.725 1.274 1.093.44 2.884.774 5.834.528l.37-.023c1.823-.06 3.117.598 3.956 1.579C14.16 6.082 14.5 7.41 14.5 8.5c0 .58-.032 1.285-.229 1.997q.198.248.382.54c.756 1.2 1.19 2.563 1.348 3.966a1 1 0 0 1-1.98.198c-.13-.97-.397-1.913-.868-2.77C12.173 13.386 10.565 14 8 14c-1.854 0-3.32-.544-4.45-1.435-1.125-.887-1.89-2.095-2.391-3.383C.16 6.62.16 3.646.509 1.902L.73.806zm-.05 1.39c-.146 1.609-.008 3.809.74 5.728.457 1.17 1.13 2.213 2.079 2.961.942.744 2.185 1.22 3.83 1.221 2.588 0 3.91-.66 4.609-1.445-1.789-2.46-4.121-1.213-6.342-2.68-.74-.488-1.735-1.323-1.844-2.308-.023-.214.237-.274.38-.112 1.4 1.6 3.573 1.757 5.59 2.045 1.227.215 2.21.526 3.033 1.158.058-.39.075-.782.075-1.158 0-.91-.288-1.988-.975-2.792-.626-.732-1.622-1.281-3.167-1.229l-.316.02c-3.05.253-5.01-.08-6.291-.598a5.3 5.3 0 0 1-1.4-.811"/>
+</svg> <span><b>YING System</b></span>
     </a>
 
     <div class="d-flex align-items-center gap-3">
       {% if token_expiry %}
         <span class="text-light small">
-          <i class="bi bi-person-circle"></i> {{ username or 'User' }} <i class="bi bi-clock-history"></i> <span id="session-timer">--:--</span>
+          <i class="bi bi-person-circle"></i> {{ username or 'User' }}
+          <i class="bi bi-clock-history ms-2"></i> <span id="session-timer">--:--</span>
         </span>
       {% endif %}
       <form action="{{ url_for('auth.logout') }}" method="post" class="d-inline">
@@ -62,7 +64,6 @@
 
   <div class="offcanvas-header border-bottom border-secondary">
     <h5 class="offcanvas-title">Menu</h5>
-    <!-- FIXED close button -->
     <button type="button"
             class="btn-close btn-close-white"
             data-bs-dismiss="offcanvas"
@@ -78,7 +79,15 @@
       </a>
       <a href="{{ url_for('books.list_books') }}"
          class="list-group-item list-group-item-action d-flex align-items-center gap-2">
+        <i class="bi bi-pencil"></i> Booking
+      </a>
+      <a href="{{ url_for('customers.list_customers') }}"
+         class="list-group-item list-group-item-action d-flex align-items-center gap-2">
         <i class="bi bi-people"></i> Customer
+      </a>
+      <a href="{{ url_for('games.list_games') }}"
+         class="list-group-item list-group-item-action d-flex align-items-center gap-2">
+        <i class="bi bi-suit-club"></i> Game
       </a>
       {% if is_admin %}
       <a href="{{ url_for('users.list_users') }}"
@@ -94,14 +103,15 @@
 <!-- Main content -->
 <main id="main" class="py-4 px-3" {% if hide_chrome %}style="margin:0;max-width:640px;margin-inline:auto;min-height:100dvh;display:grid;place-items:center;"{% endif %}>
   {% if not hide_chrome %}
-    <nav aria-label="breadcrumb" class="mb-3">
-      <ol class="breadcrumb small mb-0">
-        <li class="breadcrumb-item"><a href="{{ url_for('books.dashboard') }}">Home</a></li>
-        {% block breadcrumb %}{% endblock %}
-      </ol>
-    </nav>
-    <div id="flash-container" class="toast-container position-fixed top-0 end-0 p-3"></div>
+  <nav aria-label="breadcrumb" class="mb-3">
+    <ol class="breadcrumb small mb-0">
+      <li class="breadcrumb-item"><a href="{{ url_for('books.dashboard') }}">Home</a></li>
+      {% block breadcrumb %}{% endblock %}
+    </ol>
+  </nav>
   {% endif %}
+
+  <div id="flash-container" class="toast-container position-fixed top-0 end-0 p-3"></div>
 
   {% block content %}{% endblock %}
 
@@ -134,22 +144,26 @@
     });
   })();
 
-  // Flash toasts
+  // Flash toasts (longer on login page)
   (function(){
     const msgs = {{ get_flashed_messages(with_categories=true) | tojson }};
     const cont = document.getElementById('flash-container');
     if (!msgs || !cont) return;
+    const isLoginPage = {{ 'true' if hide_chrome else 'false' }};
     msgs.forEach(([cat, msg])=>{
       const tone = (cat==='danger')?'danger':(cat==='warning')?'warning':(cat==='success')?'success':'secondary';
       const div = document.createElement('div');
       div.className = 'toast align-items-center text-bg-' + tone + ' border-0';
       div.role = 'alert';
+      div.setAttribute('aria-live', 'assertive');
+      div.setAttribute('aria-atomic', 'true');
       div.innerHTML = `<div class="d-flex">
         <div class="toast-body">${msg}</div>
         <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
       </div>`;
       cont.appendChild(div);
-      new bootstrap.Toast(div, { delay: 2500 }).show();
+      const opts = isLoginPage ? { autohide: false } : { delay: (cat === 'danger' ? 6000 : 3000) };
+      new bootstrap.Toast(div, opts).show();
     });
   })();
 
@@ -166,6 +180,40 @@
       localStorage.setItem('theme', next);
     });
   })();
+
+  // 🔧 Robust modal auto-fill (works for all modals with data-target-fill)
+  document.addEventListener('show.bs.modal', function (ev) {
+    const modal = ev.target;
+    const btn = ev.relatedTarget;
+    if (!btn || !btn.hasAttribute('data-target-fill')) return;
+
+    const ds = btn.dataset;
+
+    // camelCase/PascalCase -> snake_case (PublishedYear -> published_year)
+    const toSnake = (s) => {
+      if (!s) return s;
+      const firstFixed = s.charAt(0).toLowerCase() + s.slice(1);
+      return firstFixed.replace(/([A-Z])/g, '_$1').toLowerCase();
+    };
+
+    // Prefill inputs by name
+    Object.keys(ds).forEach(k => {
+      if (k.startsWith('val')) {
+        const raw = k.slice(3);           // e.g. "Title", "Author", "Publishedyear"
+        const name = toSnake(raw);        // -> "title", "author", "published_year"
+        const value = ds[k] ?? '';
+        const el = modal.querySelector(`[name="${name}"]`)
+               || modal.querySelector(`input[name="${name}"], select[name="${name}"], textarea[name="${name}"]`);
+        if (el) el.value = value;
+      }
+    });
+
+    // Set dynamic form action
+    if (ds.action) {
+      const form = modal.querySelector('form');
+      if (form) form.action = ds.action;
+    }
+  });
 </script>
 
 {% block scripts %}{% endblock %}

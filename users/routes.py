@@ -23,6 +23,7 @@ def list_users():
 @users_bp.post("/create")
 def create_user():
     admin_required()
+    fullname = request.form.get("fullname") or ""
     username = (request.form.get("username") or "").strip()
     password = request.form.get("password") or ""
     is_admin = request.form.get("is_admin") == "on"
@@ -35,7 +36,7 @@ def create_user():
         flash("Username already exists.", "danger")
         return redirect(url_for("users.list_users"))
 
-    u = User(username=username, is_admin=is_admin)
+    u = User(fullname=fullname, username=username, is_admin=is_admin)
     u.set_password(password)
     db.session.add(u)
     try:
