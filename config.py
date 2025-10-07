@@ -7,11 +7,9 @@ from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent
 # Load .env only if not in production
-if os.getenv("FLASK_ENV") == "production":
-    BASE_DIR = BASE_DIR.parent
-    load_dotenv(BASE_DIR / ".env")
-else:
-    load_dotenv(BASE_DIR / ".env")
+load_dotenv(BASE_DIR / ".env")
+if os.getenv("FLASK_ENV") is None:
+    load_dotenv(BASE_DIR.parent / ".env")
 
 class Config:
     SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret")
