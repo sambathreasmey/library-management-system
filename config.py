@@ -5,12 +5,12 @@ from urllib.parse import quote_plus
 from datetime import timedelta
 from dotenv import load_dotenv
 
-BASE_DIR = Path(__file__).resolve().parent.parent
-print(BASE_DIR)
+BASE_DIR = Path(__file__).resolve().parent
 # Load .env only if not in production
 if os.getenv("FLASK_ENV") != "production":
-    print("FLASK_ENV is set to development")
     load_dotenv(BASE_DIR / ".env")
+else:
+    load_dotenv(BASE_DIR.parent / ".env")
 
 class Config:
     SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret")
@@ -29,7 +29,6 @@ class Config:
     MYSQL_HOST = os.getenv("MYSQL_HOST", "127.0.0.1")
     MYSQL_PORT = os.getenv("MYSQL_PORT", "3306")
     MYSQL_DB = os.getenv("MYSQL_DB")
-    print("MYSQL_DB >>>>>>>>>>>>>>>>>>>>>> ", MYSQL_DB)
 
     password_encoded = quote_plus(MYSQL_PASSWORD) if MYSQL_PASSWORD else ""
     SQLALCHEMY_DATABASE_URI = (
