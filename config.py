@@ -9,7 +9,9 @@ BASE_DIR = Path(__file__).resolve().parent
 
 # Load .env only if not in production
 if os.getenv("FLASK_ENV") != "production":
+    print("FLASK_ENV is set to production")
     load_dotenv(BASE_DIR / ".env")
+print("FLASK_ENV ================================================")
 
 class Config:
     SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret")
