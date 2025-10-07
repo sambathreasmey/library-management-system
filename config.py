@@ -6,11 +6,22 @@ from datetime import timedelta
 from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent
-# Always load .env from current directory
-load_dotenv(BASE_DIR / ".env")
 
-# Load .env from parent directory if FLASK_ENV is production
-load_dotenv(BASE_DIR.parent / ".env") if os.getenv("FLASK_ENV") == "production" else None
+# 1. Try loading production .env from parent dir first
+prod_env_path = BASE_DIR.parent / ".env"
+if prod_env_path.exists():
+    print(f"Attempting to load production .env from: {prod_env_path}")
+    load_dotenv(dotenv_path=prod_env_path, override=False)
+
+# 2. Load local .env from BASE_DIR (will override if needed)
+local_env_path = BASE_DIR / ".env"
+if local_env_path.exists():
+    print(f"Loading local .env from: {local_env_path}")
+    load_dotenv(dotenv_path=local_env_path, override=True)
+
+# Debug
+flask_env = os.getenv("FLASK_ENV")
+print(f"FLASK_ENV: {flask_env}")
 
 class Config:
     SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret")
