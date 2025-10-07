@@ -61,3 +61,84 @@ table.dataTable>thead .sorting_desc:after { opacity: .5; }
   background: rgba(13,110,253,.1);
 }
 .kpi .kpi-value { font-size: 2rem; font-weight: 700; line-height: 1; }
+
+
+
+.select2-container--bootstrap-5 .select2-selection--single {
+  height: calc(1.5em + 0.75rem + 2px);
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.select2-container--bootstrap-5 .select2-selection__placeholder {
+  color: #6c757d;
+}
+
+.select2-container--bootstrap-5 .select2-results {
+  max-height: 250px;
+  overflow-y: auto;
+}
+
+[data-bs-theme="dark"] .select2-container--bootstrap-5 .select2-selection--single {
+  background-color: #212529;
+  border-color: #495057;
+  color: #f8f9fa;
+}
+
+[data-bs-theme="dark"] .select2-container--bootstrap-5 .select2-selection__rendered {
+  color: #f8f9fa;
+}
+
+[data-bs-theme="dark"] .select2-container--bootstrap-5 .select2-results__option--highlighted[aria-selected] {
+  background-color: #0d6efd;
+  color: white;
+}
+
+  /* Style adjustments */
+    .select2-container--bootstrap-5 .select2-selection--single {
+      background-color: var(--bs-body-bg);
+      color: var(--bs-body-color);
+      border: 1px solid var(--bs-border-color);
+    }
+
+    .select2-container--bootstrap-5 .select2-selection__rendered {
+      color: var(--bs-body-color) !important;
+      background-color: transparent;
+    }
+
+    .select2-container--bootstrap-5 .select2-selection__placeholder {
+      color: var(--bs-secondary-text);
+    }
+
+    .select2-container--bootstrap-5 .select2-results__option--highlighted[aria-selected] {
+      background-color: var(--bs-primary-bg);
+      color: var(--bs-primary-text);
+    }
+
+    .select2-container--bootstrap-5 .select2-results {
+      background-color: var(--bs-body-bg);
+      color: var(--bs-body-color);
+    }
+
+    .select2-container--bootstrap-5 .select2-selection__arrow b {
+      border-color: var(--bs-body-color) transparent transparent transparent !important;
+    }
+
+    [data-bs-theme="light"] {
+      --bs-body-bg: #ffffff;
+      --bs-body-color: #212529;
+      --bs-border-color: #ced4da;
+      --bs-secondary-text: #6c757d;
+      --bs-primary-bg: #0d6efd;
+      --bs-primary-text: #ffffff;
+    }
+
+    [data-bs-theme="dark"] {
+      --bs-body-bg: #212529;
+      --bs-body-color: #f8f9fa;
+      --bs-border-color: #495057;
+      --bs-secondary-text: #adb5bd;
+      --bs-primary-bg: #0d6efd;
+      --bs-primary-text: #ffffff;
+    }

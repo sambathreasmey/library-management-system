@@ -45,14 +45,17 @@ def create_transaction():
     bank_stor = form.get("bank_stor", "")
     currency = form.get("currency", "USD")
     type = form.get("type", 1)
+    customer_id = form.get("customer_id", "")
+    bank_id = form.get("bank_id", "")
+    game_id = form.get("game_id", "")
 
-    if not amount or not bank_stor or not currency or not type:
-        flash("Transaction amount, bank_stor , currency or type are required.", "warning")
+    if not amount or not bank_stor or not currency or not type or not customer_id or not bank_id or not game_id or not user_id:
+        flash("Transaction amount, bank_stor , currency, customer, bank, game or type are required.", "warning")
         return redirect(url_for("booking.booking"))
 
     try:
         transaction = Transaction(amount=amount, currency=currency, bank_stor=bank_stor, type=type, user_id=user_id,
-                    created_by=username, updated_by=username)
+                    created_by=username, updated_by=username, customer_id=customer_id, bank_id=bank_id, game_id=game_id)
         db.session.add(transaction)
         db.session.commit()
         flash("Transaction created.", "success")

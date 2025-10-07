@@ -22,8 +22,34 @@
       </h6>
       <form method="post" action="{{ url_for('transactions.create_transaction') }}">
         <div class="row g-2">
+          <div class="col-md-6">
+            <select id="customerSelect" name="customer_id" class="form-select" required>
+              <option value="" disabled selected>Select Customer by ID, Name, or Ref</option>
+              {% for customer in customers %}
+                <option value="{{ customer.id }}">
+                  {{ customer.name }} - {{ customer.acc_id }}
+                </option>
+              {% endfor %}
+            </select>
+          </div>
           <div class="col-md-3"><input class="form-control" name="amount" placeholder="Amount" required></div>
           <div class="col-md-3"><input class="form-control" name="bank_stor" placeholder="Bank Stor" required></div>
+          <div class="col-md-3">
+            <select class="form-select" name="game_id" required>
+              <option value="" disabled selected>Select Game</option>
+              {% for game in games %}
+                <option value="{{ game.id }}">{{ game.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="col-md-3">
+            <select class="form-select" name="bank_id" required>
+              <option value="" disabled selected>Select Bank</option>
+              {% for bank in banks %}
+                <option value="{{ bank.id }}">{{ bank.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
           <div class="col-md-3">
             <select class="form-select" name="currency" required>
               <option value="USD">USD</option>
@@ -37,10 +63,40 @@
             </select>
           </div>
         </div>
-        <div class="mt-2 text-end">
+         <div class="row g-2">
+         </div>
+        <div class="mt-3 text-end">
           <button class="btn btn-success"><i class="bi bi-check2-circle me-1"></i> Booking</button>
         </div>
       </form>
     </div>
   </div>
+{% endblock %}
+
+
+{% block scripts %}
+
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+  $(document).ready(function() {
+    function initSelect2() {
+      $('#customerSelect').select2({
+        theme: 'bootstrap-5',
+        placeholder: 'Select Customer by ID, Name, or Ref',
+        allowClear: true,
+        width: '100%',
+        dropdownParent: $('#customerSelect').parent()
+      });
+    }
+
+    initSelect2();
+
+    // On theme toggle, destroy & re-init Select2 for style refresh
+    document.getElementById('toggleTheme').addEventListener('click', function() {
+      $('#customerSelect').select2('destroy');
+      initSelect2();
+    });
+  });
+</script>
+
 {% endblock %}

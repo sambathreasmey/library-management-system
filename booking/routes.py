@@ -3,7 +3,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_jwt_extended import verify_jwt_in_request, get_jwt
 from sqlalchemy import func
 from extensions import db
-from models import User, Transaction, Customer
+from models import User, Transaction, Customer, Bank, Game
 
 books_bp = Blueprint("booking", __name__, url_prefix="")
 
@@ -46,4 +46,7 @@ def dashboard():
 @books_bp.get("/manage/booking")
 def booking():
     login_required()
-    return render_template("booking.html")
+    banks = Bank.query.all()
+    customers = Customer.query.all()
+    games = Game.query.all()
+    return render_template("booking.html", banks=banks, customers=customers, games=games)

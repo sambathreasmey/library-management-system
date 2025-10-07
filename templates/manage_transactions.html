@@ -15,34 +15,34 @@
     </div>
   </div>
 
-  <div class="card mb-4">
-    <div class="card-body">
-      <h6 class="mb-3 d-flex align-items-center gap-2">
-        <i class="bi bi-plus-circle text-success"></i> Add Transaction
-      </h6>
-      <form method="post" action="{{ url_for('transactions.create_transaction') }}">
-        <div class="row g-2">
-          <div class="col-md-3"><input class="form-control" name="amount" placeholder="Amount" required></div>
-          <div class="col-md-3"><input class="form-control" name="bank_stor" placeholder="Bank Stor" required></div>
-          <div class="col-md-3">
-            <select class="form-select" name="currency" required>
-              <option value="USD">USD</option>
-              <option value="KHR">KHR</option>
-            </select>
-          </div>
-          <div class="col-md-3">
-            <select class="form-select" name="type" required>
-              <option value="1">Deposit</option>
-              <option value="2">Withdrawal</option>
-            </select>
-          </div>
-        </div>
-        <div class="mt-2 text-end">
-          <button class="btn btn-success"><i class="bi bi-check2-circle me-1"></i> Create</button>
-        </div>
-      </form>
-    </div>
-  </div>
+<!--  <div class="card mb-4">-->
+<!--    <div class="card-body">-->
+<!--      <h6 class="mb-3 d-flex align-items-center gap-2">-->
+<!--        <i class="bi bi-plus-circle text-success"></i> Add Transaction-->
+<!--      </h6>-->
+<!--      <form method="post" action="{{ url_for('transactions.create_transaction') }}">-->
+<!--        <div class="row g-2">-->
+<!--          <div class="col-md-3"><input class="form-control" name="amount" placeholder="Amount" required></div>-->
+<!--          <div class="col-md-3"><input class="form-control" name="bank_stor" placeholder="Bank Stor" required></div>-->
+<!--          <div class="col-md-3">-->
+<!--            <select class="form-select" name="currency" required>-->
+<!--              <option value="USD">USD</option>-->
+<!--              <option value="KHR">KHR</option>-->
+<!--            </select>-->
+<!--          </div>-->
+<!--          <div class="col-md-3">-->
+<!--            <select class="form-select" name="type" required>-->
+<!--              <option value="1">Deposit</option>-->
+<!--              <option value="2">Withdrawal</option>-->
+<!--            </select>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        <div class="mt-2 text-end">-->
+<!--          <button class="btn btn-success"><i class="bi bi-check2-circle me-1"></i> Create</button>-->
+<!--        </div>-->
+<!--      </form>-->
+<!--    </div>-->
+<!--  </div>-->
 
   <div class="card">
     <div class="card-body">
@@ -54,6 +54,9 @@
               <th>Amount</th>
               <th>Currency</th>
               <th>Bank Stor</th>
+              <th>Customer ID</th>
+              <th>Bank ID</th>
+              <th>Game ID</th>
               <th>Type</th>
               <th>Created By</th>
               <th>Updated By</th>
@@ -163,6 +166,9 @@ $(function(){
       { data: "amount" },
       { data: "currency" },
       { data: "bank_stor" },
+      { data: "customer_id" },
+      { data: "bank_id" },
+      { data: "game_id" },
       {
         data: "type",
         render: function(data, type, row) {
