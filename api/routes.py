@@ -1,6 +1,8 @@
 from flask import Blueprint, request, jsonify, abort
 from flask_jwt_extended import verify_jwt_in_request, get_jwt
 from sqlalchemy import func, or_, asc, desc
+from sqlalchemy.orm import joinedload
+
 from extensions import db
 from models import User, Customer, Game, Bank, Transaction
 
@@ -192,7 +194,11 @@ def transactions_table():
     draw, start, length, search_value, order_col_index, order_dir = _parse_dt_params()
     columns = ["id", "amount", "created_by", "updated_by", "created_at", "updated_at"]
 
-    base_query = db.session.query(Transaction)
+    base_query = db.session.query(Transaction).options(
+        joinedload(Transaction.customer),
+        joinedload(Transaction.bank),
+        joinedload(Transaction.game)
+    )
     total_records = db.session.scalar(db.select(func.count(Transaction.id))) or 0
 
     if search_value:
@@ -226,8 +232,11 @@ def transactions_table():
             "amount": transaction.amount,
             "bank_stor": transaction.bank_stor,
             "customer_id": transaction.customer_id,
+            "customer_name": transaction.customer.name if transaction.customer else "",
             "bank_id": transaction.bank_id,
+            "bank_name": transaction.bank.name if transaction.bank else "",
             "game_id": transaction.game_id,
+            "game_name": transaction.game.name if transaction.game else "",
             "currency": transaction.currency,
             "type": transaction.type,
             "created_by": transaction.created_by or "",
