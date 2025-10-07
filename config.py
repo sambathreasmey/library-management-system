@@ -9,13 +9,11 @@ BASE_DIR = Path(__file__).resolve().parent
 
 # 1. Try loading production .env from parent dir first
 prod_env_path = BASE_DIR.parent / ".env"
+local_env_path = BASE_DIR / ".env"
 if prod_env_path.exists():
     print(f"Attempting to load production .env from: {prod_env_path}")
     load_dotenv(dotenv_path=prod_env_path, override=False)
-
-# 2. Load local .env from BASE_DIR (will override if needed)
-local_env_path = BASE_DIR / ".env"
-if local_env_path.exists():
+else:
     print(f"Loading local .env from: {local_env_path}")
     load_dotenv(dotenv_path=local_env_path, override=True)
 
