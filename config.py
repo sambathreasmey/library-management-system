@@ -6,9 +6,11 @@ from datetime import timedelta
 from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent
-# Load .env only if not in production
-if os.getenv("FLASK_ENV") is None:
-    load_dotenv(BASE_DIR.parent / ".env")
+# Always load .env from current directory
+load_dotenv(BASE_DIR / ".env")
+
+# Load .env from parent directory if FLASK_ENV is production
+load_dotenv(BASE_DIR.parent / ".env") if os.getenv("FLASK_ENV") == "production" else None
 
 class Config:
     SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret")
