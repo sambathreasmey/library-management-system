@@ -8,6 +8,7 @@ from dotenv import load_dotenv
 BASE_DIR = Path(__file__).resolve().parent
 
 # Load .env only if not in production
+print("FLASK_ENV ===== ", os.getenv("FLASK_ENV"))
 if os.getenv("FLASK_ENV") != "production":
     print("FLASK_ENV is set to development")
     load_dotenv(BASE_DIR / ".env")
