@@ -2,7 +2,7 @@ name: Deploy via PythonAnywhere Console (reuse if possible)
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   workflow_dispatch:
 
 jobs:
