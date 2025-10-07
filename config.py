@@ -7,7 +7,6 @@ from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent
 # Load .env only if not in production
-load_dotenv(BASE_DIR / ".env")
 if os.getenv("FLASK_ENV") is None:
     load_dotenv(BASE_DIR.parent / ".env")
 
