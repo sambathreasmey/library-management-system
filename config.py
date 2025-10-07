@@ -11,7 +11,8 @@ BASE_DIR = Path(__file__).resolve().parent
 print("FLASK_ENV ===== ", os.getenv("FLASK_ENV"))
 if os.getenv("FLASK_ENV") != "production":
     print("FLASK_ENV is set to development")
-    load_dotenv(BASE_DIR / "../.env")
+    print(BASE_DIR)
+    load_dotenv(BASE_DIR / ".env")
 
 class Config:
     SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret")
