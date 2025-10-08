@@ -29,6 +29,7 @@ def admin_required():
         abort(403, description="Admins only")
 
 @books_bp.get("/dashboard")
+@cache.cached(timeout=120, key_prefix='dashboard_html_v1')
 def dashboard():
     login_required()
     total_customers = db.session.scalar(db.select(func.count(Customer.id))) or 0
