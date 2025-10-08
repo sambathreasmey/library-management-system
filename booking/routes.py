@@ -2,7 +2,7 @@ from functools import wraps
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_jwt_extended import verify_jwt_in_request, get_jwt
 from sqlalchemy import func
-from extensions import db
+from extensions import db, cache
 from models import User, Transaction, Customer, Bank, Game
 
 books_bp = Blueprint("booking", __name__, url_prefix="")
