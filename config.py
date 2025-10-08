@@ -47,4 +47,5 @@ class Config:
         "pool_recycle": 280,
         "pool_timeout": 30
     }
+    SQLALCHEMY_ECHO = True
     SQLALCHEMY_TRACK_MODIFICATIONS = False
