@@ -6,3 +6,4 @@ python-dotenv==1.0.1
 werkzeug==3.0.3
 
 SQLAlchemy~=2.0.43
+Flask-Caching
