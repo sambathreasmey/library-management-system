@@ -5,14 +5,17 @@ from extensions import db, jwt
 from models import User
 import os
 from jinja2 import FileSystemBytecodeCache
+from flask_caching import Cache
 
 def create_app():
-    cache_dir = '/tmp/jinja_cache'
-    os.makedirs(cache_dir, exist_ok=True)  # ✅ creates if missing
 
     app = Flask(__name__, static_folder="static", template_folder="templates")
-    app.jinja_env.bytecode_cache = FileSystemBytecodeCache(cache_dir, '%s.cache')
     app.config.from_object(Config)
+    
+    cache_dir = '/tmp/jinja_cache'
+    os.makedirs(cache_dir, exist_ok=True)  # ✅ creates if missing
+    app.jinja_env.bytecode_cache = FileSystemBytecodeCache(cache_dir, '%s.cache')
+    cache = Cache(app)  # picks up CACHE_* from Config
 
     db.init_app(app)
     jwt.init_app(app)
