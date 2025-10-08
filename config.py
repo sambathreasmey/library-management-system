@@ -51,9 +51,10 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     FS_CACHE_DIR = os.path.expanduser('~/flask_cache')
-    os.makedirs(FS_CACHE_DIR, exist_ok=True)
-
     CACHE_TYPE = 'simple'          # use 'simple' if only 1 worker 'filesystem' if only 2 worker
     CACHE_DIR = FS_CACHE_DIR
     CACHE_DEFAULT_TIMEOUT = 180
     CACHE_THRESHOLD = 5000
+    
+    JINJA_CACHE_DIR = os.path.expanduser('~/jinja_cache')
+    JINJA_BYTECODE_PATTERN = '%s.cache'
