@@ -1,21 +1,28 @@
 from flask import Flask, redirect, url_for, request
 from flask_jwt_extended import get_jwt, get_jwt_identity, verify_jwt_in_request
 from config import Config
-from extensions import db, jwt
+from extensions import db, jwt, cache
 from models import User
 import os
 from jinja2 import FileSystemBytecodeCache
-from flask_caching import Cache
 
 def create_app():
 
     app = Flask(__name__, static_folder="static", template_folder="templates")
     app.config.from_object(Config)
     
-    cache_dir = '/tmp/jinja_cache'
-    os.makedirs(cache_dir, exist_ok=True)  # ✅ creates if missing
-    app.jinja_env.bytecode_cache = FileSystemBytecodeCache(cache_dir, '%s.cache')
-    cache = Cache(app)  # picks up CACHE_* from Config
+   # ensure dirs exist
+    os.makedirs(app.config['CACHE_DIR'], exist_ok=True)
+    os.makedirs(app.config['JINJA_CACHE_DIR'], exist_ok=True)
+
+    # init extensions
+    cache.init_app(app)
+
+    # jinja bytecode cache
+    app.jinja_env.bytecode_cache = FileSystemBytecodeCache(
+        app.config['JINJA_CACHE_DIR'],
+        app.config.get('JINJA_BYTECODE_PATTERN', '%s.cache'),
+    )
 
     db.init_app(app)
     jwt.init_app(app)
