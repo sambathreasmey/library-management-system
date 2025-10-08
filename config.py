@@ -40,4 +40,11 @@ class Config:
         f"mysql+mysqlconnector://{MYSQL_USER}:{password_encoded}"
         f"@{MYSQL_HOST}:{MYSQL_PORT}/{MYSQL_DB}?charset=utf8mb4"
     )
+    SQLALCHEMY_ENGINE_OPTIONS = {
+        "pool_pre_ping": True,
+        "pool_size": 5,
+        "max_overflow": 10,
+        "pool_recycle": 280,
+        "pool_timeout": 30
+    }
     SQLALCHEMY_TRACK_MODIFICATIONS = False
