@@ -3,9 +3,11 @@ from flask_jwt_extended import get_jwt, get_jwt_identity, verify_jwt_in_request
 from config import Config
 from extensions import db, jwt
 from models import User
+from jinja2 import FileSystemBytecodeCache
 
 def create_app():
     app = Flask(__name__, static_folder="static", template_folder="templates")
+    app.jinja_env.bytecode_cache = FileSystemBytecodeCache('/tmp/jinja_cache', '%s.cache')
     app.config.from_object(Config)
 
     db.init_app(app)
