@@ -32,7 +32,9 @@
               {% endfor %}
             </select>
           </div>
-          <div class="col-md-3"><input class="form-control" name="amount" placeholder="Amount" required></div>
+          <div class="col-md-3">
+            <input type="number" step="any" class="form-control" name="amount" placeholder="Amount" required>
+          </div>
           <div class="col-md-3"><input class="form-control" name="bank_stor" placeholder="Bank Stor" required></div>
           <div class="col-md-3">
             <select class="form-select" name="game_id" required>

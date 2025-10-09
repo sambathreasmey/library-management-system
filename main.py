@@ -95,6 +95,7 @@ def create_app():
     from games.routes import games_bp
     from banks.routes import banks_bp
     from transactions.routes import transactions_bp
+    from reports.routes import reports_bp
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(books_bp)
@@ -104,6 +105,7 @@ def create_app():
     app.register_blueprint(transactions_bp)
     app.register_blueprint(users_bp)
     app.register_blueprint(api_bp)
+    app.register_blueprint(reports_bp)
 
     @app.route("/")
     def index():
