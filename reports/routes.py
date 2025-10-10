@@ -19,7 +19,6 @@ def _parse_date(s, default=None):
 def report_page():
     # Prefill dropdowns (optional; adjust to your models/fields)
     users = db.session.query(User.id, User.username).order_by(User.username).all()
-    # If you have models Customer, Bank, Game:
     try:
         from models import Customer, Bank, Game
         customers = db.session.query(Customer.id, Customer.name).order_by(Customer.name).all()
